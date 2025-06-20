@@ -29,6 +29,12 @@
             min-height: 100vh;
         }
 
+        /* --- Furigana Style (for ruby text) --- */
+        rt {
+            font-size: 0.6em;
+            color: var(--text-color);
+        }
+
         /* --- Main Layout Container --- */
         .container {
             display: flex;
@@ -44,6 +50,8 @@
             flex-direction: column;
             position: fixed; /* Fix the sidebar to the left */
             height: 100%;
+            /* Add transition for mobile slide-in/out effect */
+            transition: transform 0.3s ease-in-out;
         }
 
         .sidebar-header {
@@ -59,6 +67,7 @@
         .sidebar-header .logo {
             margin-right: 15px;
             font-size: 1.8em;
+            writing-mode: horizontal-tb; /* Explicitly set horizontal writing (yokogaki) */
         }
         
         .sidebar-nav {
@@ -122,15 +131,75 @@
             font-size: 1.1em;
             line-height: 1.7;
         }
+
+        /* --- Mobile-Specific Hamburger Menu Button --- */
+        #menu-toggle {
+            display: none; /* Hidden on desktop */
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001; /* Ensure it's above the sidebar */
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            font-size: 1.8em;
+            line-height: 1.2;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #menu-toggle:hover {
+            background: var(--hover-red);
+        }
+
+        /* --- Media Query for Mobile Responsiveness --- */
+        @media (max-width: 800px) {
+            .sidebar {
+                /* On mobile, hide sidebar off-screen by default */
+                transform: translateX(-100%);
+                z-index: 1000;
+                box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+            }
+            .sidebar.open {
+                /* .open class brings sidebar into view */
+                transform: translateX(0);
+            }
+
+            .main-content {
+                /* Remove the margin to allow content to be full-width */
+                margin-left: 0;
+                /* Adjust padding for smaller screens and to avoid the menu button */
+                padding: 70px 20px 20px 20px;
+            }
+
+            /* Adjust heading sizes for better readability on mobile */
+            .main-content h1 {
+                font-size: 2.2em;
+            }
+             .main-content h2 {
+                font-size: 1.5em;
+            }
+
+            #menu-toggle {
+                /* Show the hamburger button on mobile */
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <!-- Hamburger menu button, only visible on mobile -->
+    <button id="menu-toggle" aria-label="Open Menu">☰</button>
 
     <div class="container">
         <!-- Left Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <span class="logo">解放</span>
+                <!-- Logo with Furigana using <ruby> tag -->
+                <span class="logo"><ruby>解放<rt>かいほう</rt></ruby></span>
                 <span>My Website</span>
             </div>
             <ul class="sidebar-nav">
@@ -202,9 +271,20 @@
     </div>
 
     <script>
-        // Simple script to handle the "active" class on nav links
+        // --- Get elements for interactivity ---
         const navLinks = document.querySelectorAll('.nav-link');
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
 
+        // --- Event Listener for Hamburger Menu ---
+        // Toggles the 'open' class on the sidebar to show/hide it
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+            });
+        }
+        
+        // --- Event Listener for Navigation Links ---
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
                 // Remove 'active' class from all links
@@ -212,6 +292,10 @@
                 
                 // Add 'active' class to the clicked link
                 link.classList.add('active');
+
+                // --- Close sidebar on mobile after clicking a link ---
+                // This improves UX on smaller screens
+                sidebar.classList.remove('open');
             });
         });
     </script>
