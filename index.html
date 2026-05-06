@@ -31,6 +31,32 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            /* دعم شريط التمرير لمتصفح فايرفوكس */
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+
+        /* --- تخصيص شريط التمرير (Scrollbar) للمتصفحات المبنية على WebKit (كروم، إيدج، سفاري) --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main); 
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: var(--bg-sidebar); /* شريط تمرير القائمة الجانبية يطابق لونها */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; 
         }
 
         html {
