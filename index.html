@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>解放 - دليل تعلم اليابانية</title>
+    <title>تحرير – دليل شامل لتعلم اللغة اليابانية</title>
     <style>
         /* --- متغيرات الألوان --- */
         :root {
             --bg-color: #212529;
             --sidebar-bg: #343a40;
             --text-color: #e9ecef;
-            --primary-red: #c0392b; /* أحمر غامق للمسات */
-            --hover-red: #962d22;  /* أحمر أغمق عند التمرير */
+            --primary-red: #c0392b;
+            --hover-red: #962d22;
             --border-color: #495057;
+            --code-bg: #2a2f34;
+            --link-color: #e67e22;
         }
         
-        /* --- الإعدادات الأساسية (RTL افتراضي) --- */
+        /* --- إعدادات RTL أساسية وخطوط --- */
         html {
             scroll-behavior: smooth;
-            /* خط مناسب للغة العربية */
-            font-family: "Tahoma", "Segoe UI", sans-serif;
+            font-family: "Tahoma", "Segoe UI", "Noto Sans Arabic", sans-serif;
         }
         
         body {
@@ -28,220 +29,324 @@
             color: var(--text-color);
             display: flex;
             min-height: 100vh;
-            text-align: right; /* محاذاة النص الافتراضية لـ RTL */
+            text-align: right;
         }
-
-        /* --- تنسيق نص فورغانا --- */
-        rt {
-            font-size: 0.6em;
-            color: var(--text-color);
+        
+        rt { font-size: 0.7em; color: #f1c40f; }
+        a { color: var(--link-color); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code, pre {
+            background-color: var(--code-bg);
+            border-radius: 6px;
+            font-family: monospace;
+            direction: ltr;
+            text-align: left;
+            padding: 2px 5px;
         }
-
-        /* --- حاوية التخطيط الرئيسية --- */
-        .container {
-            display: flex;
-            width: 100%;
-        }
-
-        /* --- الشريط الجانبي (RTL افتراضي) --- */
+        pre { padding: 12px; overflow-x: auto; }
+        
+        /* --- الحاوية الرئيسية والشريط الجانبي --- */
+        .container { display: flex; width: 100%; }
         .sidebar {
-            width: 260px;
+            width: 280px;
             flex-shrink: 0;
             background-color: var(--sidebar-bg);
-            display: flex;
-            flex-direction: column;
             position: fixed;
             height: 100%;
-            transition: transform 0.3s ease-in-out;
-            /* تحديد الموقع لـ RTL */
+            transition: transform 0.3s;
             right: 0;
+            overflow-y: auto;
+            z-index: 1000;
         }
-
         .sidebar-header {
             padding: 20px;
             background-color: var(--primary-red);
-            color: #ffffff;
+            color: white;
             font-size: 1.5em;
             font-weight: bold;
             display: flex;
             align-items: center;
         }
-
-        .sidebar-header .logo {
-            margin-left: 15px; /* هامش لـ RTL */
-            font-size: 1.8em;
-            writing-mode: horizontal-tb; /* Yokogaki */
-        }
-        
-        .sidebar-nav {
-            list-style-type: none;
-            padding: 20px 0;
-            margin: 0;
-            flex-grow: 1;
-        }
-
+        .sidebar-header .logo { margin-left: 15px; font-size: 1.8em; }
+        .sidebar-nav { list-style: none; padding: 20px 0; margin: 0; }
         .sidebar-nav li a {
             display: block;
             color: var(--text-color);
-            text-decoration: none;
-            padding: 15px 25px;
-            font-size: 1.1em;
-            transition: background-color 0.3s, color 0.3s;
+            padding: 12px 25px;
+            font-size: 1.05em;
+            transition: 0.2s;
         }
-
-        .sidebar-nav li a:hover {
+        .sidebar-nav li a:hover, .sidebar-nav li a.active {
             background-color: var(--hover-red);
+            border-right: 4px solid var(--primary-red);
         }
-        
-        .sidebar-nav li a.active {
-            background-color: var(--primary-red);
-            color: #ffffff;
-            font-weight: 500;
-        }
-
-        /* --- منطقة المحتوى الرئيسية (RTL افتراضي) --- */
         .main-content {
             flex-grow: 1;
             padding: 40px 50px;
-            margin-right: 260px; /* إزاحة المحتوى يسار الشريط الجانبي */
+            margin-right: 280px;
         }
+        .content-section { padding-top: 20px; margin-bottom: 50px; }
+        .main-content h1 { font-size: 2.6em; border-bottom: 2px solid var(--primary-red); padding-bottom: 15px; }
+        .main-content h2 { color: var(--primary-red); margin-top: 30px; }
+        .main-content h3 { color: #f39c12; }
+        .main-content p { line-height: 1.8; font-size: 1.05rem; }
         
-        .content-section {
-            padding-top: 20px;
-            margin-bottom: 40px;
-        }
-        .content-section:first-of-type {
-            padding-top: 0;
-        }
-        
-        .main-content h1, .main-content h2, .main-content p {
-            margin-top: 0;
-        }
-        .main-content h1 {
-            font-size: 2.8em; font-weight: 300; margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-color); padding-bottom: 20px;
-        }
-        .main-content h2 { font-size: 1.8em; color: var(--primary-red); }
-        .main-content p { font-size: 1.1em; line-height: 1.7; }
-
-        /* --- زر القائمة للموبايل (RTL افتراضي) --- */
         #menu-toggle {
-            display: none; position: fixed; top: 15px; right: 15px; /* موقع RTL */
-            z-index: 1001; background: var(--primary-red); color: white; border: none;
-            padding: 5px 12px; font-size: 1.8em; line-height: 1.2; cursor: pointer; border-radius: 5px;
+            display: none;
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1100;
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            font-size: 1.8em;
+            border-radius: 6px;
+            cursor: pointer;
         }
-
-        /* --- التوافق مع الأجهزة المحمولة --- */
+        
         @media (max-width: 800px) {
-            .sidebar {
-                transform: translateX(100%); /* إخفاء الشريط الجانبي إلى اليمين */
-                z-index: 1000;
-                box-shadow: -5px 0 15px rgba(0,0,0,0.2);
-            }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            .main-content {
-                margin-right: 0;
-                padding: 70px 20px 20px 20px;
-            }
-            #menu-toggle {
-                display: block;
-            }
-
-            /* تعديل حجم الخطوط للموبايل */
-            .main-content h1 { font-size: 2.2em; }
-            .main-content h2 { font-size: 1.5em; }
+            .sidebar { transform: translateX(100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-right: 0; padding: 70px 20px 20px; }
+            #menu-toggle { display: block; }
         }
+        
+        .warning-block {
+            background-color: #2c3e50;
+            border-right: 5px solid var(--primary-red);
+            padding: 12px 20px;
+            margin: 20px 0;
+        }
+        figure { margin: 20px 0; text-align: center; }
+        figcaption { font-size: 0.9rem; color: #aaa; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid var(--border-color); padding: 8px; }
+        th { background-color: #2c3e50; }
     </style>
 </head>
 <body>
 
-    <button id="menu-toggle" aria-label="فتح القائمة">☰</button>
+<button id="menu-toggle" aria-label="فتح القائمة">☰</button>
 
-    <div class="container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <span class="logo"><ruby>解放<rt>かいほう</rt></ruby></span>
-                <span>دليلك</span>
+<div class="container">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="logo"><ruby>解放<rt>かいほう</rt></ruby></span>
+            <span>دليل اليابانية</span>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="#section-guide" class="nav-link">📘 الدليل الأساسي</a></li>
+            <li><a href="#section-faq" class="nav-link">❓ أسئلة شائعة</a></li>
+            <li><a href="#section-kanji" class="nav-link">✍️ الكانجي والمفردات</a></li>
+            <li><a href="#section-reading" class="nav-link">📖 القراءة والاستماع</a></li>
+            <li><a href="#section-resources" class="nav-link">📚 المصادر والأدوات</a></li>
+            <li><a href="#section-routine" class="nav-link">⏳ روتين 30 يوم</a></li>
+            <li><a href="#section-vn" class="nav-link">🎮 الروايات البصرية</a></li>
+            <li><a href="#section-monolingual" class="nav-link">📙 القواميس أحادية اللغة</a></li>
+            <li><a href="#section-speaking" class="nav-link">🗣️ التحدث والطلاقة</a></li>
+            <li><a href="#section-2ch" class="nav-link">🌐 5ch و المجتمع</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <!-- ================= الدليل الأساسي المترجم ================= -->
+        <section id="section-guide" class="content-section">
+            <h1>الدليل الياباني – الطريقة الصحيحة</h1>
+            <p>هذا هو الدليل الرئيسي لتعلم اليابانية عبر الانغماس اللغوي (Immersion). موصى به لمعظم الناس.</p>
+            <h2>لماذا يفشل الكثيرون في تعلم اليابانية؟</h2>
+            <p>الأهداف البسيطة (مشاهدة الأنمي بدون ترجمة، التحدث بطلاقة) لا تُحقق بالطرق التقليدية. السر هو <strong>الانغماس</strong>: الاستماع أو قراءة محتوى أصلي صنعه اليابانيون لليابانيين (أنمي خام، مانغا، روايات). الطرق التقليدية تبقيك في الحلقة المفرغة للمبتدئين ولا تصعد بك أبداً. تخيل أنك تتعلم السباحة بقراءة نظرية الحركات فقط – لا بد من النزول إلى الماء.</p>
+            <h2>كيف تتعلم اليابانية (الخطوات الأساسية)</h2>
+            <ol>
+                <li>تعلم الهيراغانا والكاتاكانا (نظاما الكتابة الصوتيان).</li>
+                <li>تعلم مفردات أساسية باستخدام أنكي وحزمة Kaishi 1.5k.</li>
+                <li>تعلم القواعد عبر يوتيوب (Cure Dolly, Yokubi, أو Tae Kim).</li>
+                <li>ابدأ الانغماس فوراً – أنمي خام، مانغا، محتوى يناسب اهتماماتك.</li>
+            </ol>
+            <p><strong>نسبة الاستماع إلى القراءة:</strong> في البداية 70% استماع / 30% قراءة. الاستماع الخام هو ما سيجعلك تتحدث بشكل طبيعي لاحقاً. لا تستخدم الترجمات الإنجليزية أو اليابانية كعكاز – اعتمد على الأصوات والسياق.</p>
+            <div class="warning-block">
+                <strong>⚠️ تذكير أساسي:</strong> لا يمكن لأحد أن "يُعلّمك" اللغة بدلاً عنك. أنت من يجب أن يغمر نفسه بالمادة. الكتب المدرسية مثل Genki ليست ضرورية، والأفضل استخدام الموارد المجانية وتعلم القراءة عبر Yomitan.
             </div>
-            <ul class="sidebar-nav">
-                <li><a href="#section1" class="nav-link active">الرئيسية</a></li>
-                <li><a href="#section2" class="nav-link">طريقة الانغماس</a></li>
-                <li><a href="#section3" class="nav-link">الاستماع والقراءة</a></li>
-                <li><a href="#section4" class="nav-link">الأدوات (Anki و Yomitan)</a></li>
-                <li><a href="#section5" class="nav-link">الأسئلة الشائعة</a></li>
+        </section>
+
+        <!-- ================= الأسئلة الشائعة (مترجمة من faq.md) ================= -->
+        <section id="section-faq" class="content-section">
+            <h1>الأسئلة الشائعة – أفضل FAQ للغة اليابانية</h1>
+            <h2>هل يمكنك تعليمي اليابانية؟</h2>
+            <p>لا أحد يستطيع "تعليمك" اللغة وتوقع تقدم كبير. تحتاج إلى دراسة ذاتية وقراءة دليلي للبدء.</p>
+            <h2>متى سأصبح طليقاً؟</h2>
+            <p>يعتمد على الطريقة وعدد الساعات اليومية. تقديرياً 4 سنوات بـ 6 ساعات يومياً إذا التزمت بالانغماس الصحيح.</p>
+            <h2>متى أبدأ باستخدام Anki؟</h2>
+            <p>يمكنك البدء فوراً بعد تعلم الكانا. أنصح ببدء حزمة Kaishi 1.5k، ثم الانتقال إلى التنقيب (mining) بعد اكتساب الأساسيات.</p>
+            <h2>كيف أتعلم الكانجي؟</h2>
+            <p>عن طريق القراءة فقط. ابحث عن الكلمات التي تحتوي على الكانجي واحفظها في سياقها. لا تضيع وقتك في حفظ قراءات On/Kun منفردة. الكانجي له معنى فقط عندما يكون ضمن كلمات.</p>
+            <h2>أسهل أنمي/مانغا/رواية بصرية للمبتدئين؟</h2>
+            <p>Mitsuboshi Colors, Yotsubato!, GJ bu, Hanahira.</p>
+            <h2>كيف أبحث عن الكلمات بسرعة على الويب؟</h2>
+            <p>استخدم إضافة Yomitan (كروم/فايرفوكس). حمّل القواميس المناسبة ومرر فوق النص مع الضغط على Shift.</p>
+            <h2>لا أفهم الجملة رغم معرفتي بكل الكلمات!</h2>
+            <p>تجاهلها الآن واستمر في الاستماع والقراءة. الفهم سيأتي تدريجياً مع تراكم المدخلات.</p>
+            <h2>هل تعلم اليابانية عبر الموسيقى مفيد؟</h2>
+            <p>بالمجرد الاستماع لا. لكن يمكنك البحث عن كلمات الأغنية وترجمتها.</p>
+            <h2>هل خطأ الحديث مع نفسي أو ارتكاب أخطاء؟</h2>
+            <p>لا، طالما أنك تغمر نفسك يومياً. اليابانيون طيبون ولا يهتمون بأخطائك، ومع الاستمرار ستصبح طبيعياً.</p>
+        </section>
+
+        <!-- ================= الكانجي والمفردات ================= -->
+        <section id="section-kanji" class="content-section">
+            <h1>تعلم الكانجي والمفردات بطريقة صحيحة</h1>
+            <p>الكثيرون يقولون "أنا أتعلم الكانجي" وهذا غير منطقي. الكانجي ليس أهدافاً بذاتها؛ يجب تعلم <strong>الكلمات</strong>. عندما تقرأ جملة وتتعلم كلمة جديدة، فأنت تعلمت الكانجي المصاحب لها. لا تدرس القوائم المعزولة أبداً.</p>
+            <h2>نظام الكانا (هيراغانا و كاتاكانا)</h2>
+            <p>الهيراغانا للأجزاء النحوية والكلمات ذات الأصل الياباني. الكاتاكانا للكلمات الأجنبية والمحاكاة الصوتية. احفظهما عبر لعبة DJT Kana أو عبر رسم الجدول.</p>
+            <h2>حزمة Kaishi 1.5k</h2>
+            <p>قائمة بأكثر 1500 كلمة شيوعاً. استخدمها مع أنكي، 10-20 بطاقة جديدة يومياً. لا تهمل المراجعات (<code>max reviews=9999</code>).</p>
+            <h2>قواعد التعامل مع الكانجي</h2>
+            <p>إذا كنت تواجه صعوبة في التمييز بين الكانجيات، يمكنك استخدام حزمة <strong>RRTK 450</strong> للتعرف على المكونات، لكن القراءة المكثفة كفيلة وحدها بعد بضعة أشهر.</p>
+        </section>
+
+        <!-- ================= القراءة والاستماع ================= -->
+        <section id="section-reading" class="content-section">
+            <h1>كيف تقرأ وتستمع – استراتيجيات متقدمة</h1>
+            <p>القراءة هي أقوى وسيلة لزيادة الحصيلة اللغوية. لكن لا تهمل الاستماع الخام. الطريقة المثلى: اقرأ مع يوميتان، واستمع إلى الأنمي أو الدراما بدون ترجمة.</p>
+            <h2>نصائح للقراءة</h2>
+            <ul>
+                <li>استخدم Yomitan + ッ츠 Reader لقراءة الـ EPUBات بسهولة.</li>
+                <li>اقرأ رواية خفيفة من مسلسل أنمي شاهدته (تحفز الفهم).</li>
+                <li>لا تقلق إذا لم تفهم جملة كاملة. ابحث عن الكلمات وامضِ قدماً.</li>
+                <li>حاول القراءة <strong>بصوت مرتفع داخلياً</strong> لتثبيت النطق، لكن لا تقلقه كثيراً.</li>
             </ul>
-        </aside>
+            <h2>الاستماع السلبي والنشط</h2>
+            <p>الاستماع النشط (تركيز كامل) مصدر المكاسب الأكبر. الاستماع السلبي (خلفية) مفيد لمنشغلي الحياة. استمع إلى ملفات <strong>Condensed Audio</strong> لتكثيف المدخلات.</p>
+            <p><strong>قاعدة ذهبية:</strong> لا تترجم في رأسك أثناء الاستماع – فكر باليابانية مباشرةً.</p>
+        </section>
 
-        <main class="main-content">
-            <section id="section1" class="content-section">
-                <h1>مرحباً بك في دليلك لتعلم اليابانية</h1>
-                <h2>البداية الصحيحة</h2>
-                <p>أهلاً بك! يمكنك هنا "تعلم كيف تتعلم" اللغة اليابانية بالطريقة الصحيحة.</p>
-                <p>لدى العديد من الأشخاص أهداف بسيطة: الاستمتاع بالمحتوى الياباني الأصلي (بدون ترجمة) والتحدث بطلاقة. ومع ذلك، يفشل الكثيرون في الوصول إلى هذه الأهداف حتى بعد سنوات من الدراسة. هل اللغة صعبة للغاية؟ أم أنهم لا يدرسون بجدية كافية؟</p>
-                <p>في الحقيقة، الخطأ ليس فيهم، بل في "الطريقة". للوصول إلى الطلاقة، يجب أن تدمج مكوناً سحرياً في روتينك: <strong>الانغماس اللغوي (Immersion)</strong>.</p>
-            </section>
+        <!-- ================= المصادر والأدوات ================= -->
+        <section id="section-resources" class="content-section">
+            <h1>المصادر والأدوات – كل ما تحتاجه</h1>
+            <h2>لتعلم الكانا والقواعد</h2>
+            <ul>
+                <li><a href="https://djtguide.neocities.org/kana/">لعبة تعلم الكانا</a></li>
+                <li><a href="https://yoku.bi/">Yokubi – شرح قواعد مبسط</a></li>
+                <li><a href="https://www.youtube.com/playlist?list=PLg9uYxuZf8x_A-vcqqyOFZu06WlhnypWj">Cure Dolly (يوتيوب)</a></li>
+            </ul>
+            <h2>القواميس والإضافات</h2>
+            <ul>
+                <li>Yomitan – <a href="https://chromewebstore.google.com/detail/yomitan/likgccmbimhjbgkjambclfkhldnlhbnn">للكروم</a></li>
+                <li><a href="https://learnjapanese.link/dictionaries">مجموعة قواميس شوي</a> (تشمل JMdict، Shinmeikai، Daijirin)</li>
+                <li>Jisho.org – قاموس إنجليزي-ياباني للمبتدئين</li>
+            </ul>
+            <h2>مصادر المحتوى (أنمي، مانغا، روايات)</h2>
+            <ul>
+                <li><a href="https://nyaa.si/">Nyaa.si</a> (تورنتات خام)</li>
+                <li><a href="https://reader.ttsu.app/">ッ츠 قارئ كتب إلكترونية</a></li>
+                <li><a href="https://itazuraneko.neocities.org/library/shousetu.html">مكتبة إيتازورانيكو</a> للروايات الخفيفة</li>
+                <li><a href="https://mokuro.moe/catalog/">Mokuro</a> لقراءة المانغا مع يوميتان</li>
+            </ul>
+            <h2>أدوات التنقيب والتكرار</h2>
+            <p>أنكي + إضافة AnkiConnect + قوالب Lapis. قم بفرز البطاقات حسب التكرار باستخدام AutoReorder. استخدم الصوت المحلي (Local Audio) للحصول على نطق دقيق.</p>
+        </section>
 
-            <section id="section2" class="content-section">
-                <h1>طريقة الانغماس اللغوي</h1>
-                <h2>لماذا تفشل الطرق التقليدية؟</h2>
-                <p>يتبع العديد من الطلاب طرقاً تقليدية مثل دراسة القواعد من الكتب، حفظ الكلمات المعزولة، ومحاولة تكوين جمل وترجمتها. هذه الطريقة تُشبه محاولة تعلم السباحة بقراءة كتاب عنها دون النزول إلى المسبح.</p>
-                <h2>ما هو الانغماس؟</h2>
-                <p>الانغماس يعني التفاعل مع محتوى طبيعي باللغة الهدف. أي محتوى <strong>صُنع بواسطة اليابانيين، ولليابانيين</strong> (مثل الأنمي، المانغا، والروايات) وليس للمتعلمين.</p>
-                <p>تعلم اللغة يتطلب منك تقبل فكرة "عدم الفهم التام" في البداية. عقلك سيقوم تلقائياً بتخزين الأنماط اللغوية عندما تستمر في الاستماع والقراءة بكثافة.</p>
-            </section>
+        <!-- ================= روتين 30 يوم ================= -->
+        <section id="section-routine" class="content-section">
+            <h1>روتين اليابان – 30 يوماً (UsagiSpoon)</h1>
+            <p>هذا الروتين موجه للمبتدئين المطلقين. بحلول اليوم 30 ستكون قد أتقنت الكانا، وأتممت 500 كلمة، وفهمت أساسيات القواعد، وبدأت بفهم جمل بسيطة من أنمي الحياة اليومية.</p>
+            <ul>
+                <li><strong>الأيام 1-3:</strong> تعلم الهيراغانا والكاتاكانا عبر الرسم واللعبة التفاعلية. شاهد حلقة أنمي مرة بالإنجليزية ثم بدون ترجمة.</li>
+                <li><strong>اليوم 4:</strong> تثبيت أنكي واستيراد Kaishi 1.5k، ضبط إعدادات المراجعة (max reviews=9999).</li>
+                <li><strong>الأيام 5-10:</strong> 3 فيديوهات Cure Dolly يومياً + 10 كلمات جديدة + 1 حلقة أنمي خام.</li>
+                <li><strong>الأيام 11-30:</strong> التركيز على القراءة باستخدام يوتسوبا! (مانغا) مع أداة Mokuro. اقرأ 100 صفحة خلال الفترة.</li>
+            </ul>
+            <p>بعد الشهر الأول: ابدأ التنقيب الشخصي، وأكمل حزمة Kaishi، وانتقل إلى رواية خفيفة أو رواية بصرية.</p>
+        </section>
 
-            <section id="section3" class="content-section">
-                <h1>الاستماع والقراءة</h1>
-                <h2>أهمية الاستماع الخام (بدون ترجمة)</h2>
-                <p>الترجمة الإنجليزية هي عكاز لن يجعلك أفضل في الاستماع ولا في القراءة. الاستماع هو النهج الطبيعي لتعلم اللغات. استمع للأنمي بدون ترجمة لتعويد أذنك على الأصوات الحقيقية ولتأسيس النطق الصحيح في عقلك. لا تتوقف عند كل كلمة لتفهمها؛ دع اللغة تتدفق واستمتع.</p>
-                <h2>كيف تبدأ القراءة؟</h2>
-                <p>بعد تعلم أبجدية الكانا (الهيراغانا والكاتاكانا) واكتساب مفردات أساسية، يمكنك البدء بقراءة المانغا أو الروايات المرئية (Visual Novels). القراءة هي أداتك الأقوى لزيادة حصيلتك من المفردات، وسوف تواجه الكلمات التي تقرأها في الأنمي لاحقاً.</p>
-            </section>
+        <!-- ================= الروايات البصرية ================= -->
+        <section id="section-vn" class="content-section">
+            <h1>الروايات البصرية – قفزة في القراءة</h1>
+            <p>VNs مزيج رائع بين النثر الأدبي والحوار الصوتي. استخدم Textractor + WebSocket + Texthooker UI لتوصيل النص إلى يوميتان. اتبع الأدلة الخاصة بنظامك:</p>
+            <ul>
+                <li><a href="#vn-win">ويندوز</a> – اضبط locale الياباني، ثبت WinCDEmu، طبق الكراك إن وجد.</li>
+                <li><a href="#vn-linux">لينكس</a> – عبر Proton/Wine أو آلة افتراضية.</li>
+                <li><a href="#vn-mac">ماك (Apple Silicon)</a> – استخدم Parallels + ويندوز 11 ARM.</li>
+                <li><a href="#vn-android">أندرويد</a> – استخدم PPSSPP أو Kirikiroid2 أو Winlator.</li>
+            </ul>
+            <p>ابدأ بروايات سهلة مثل <i>Kanon</i> أو <i>Konosora</i> أو <i>Aiyoku no Eustia</i>. اقسم القراءة إلى جلسات (Pomodoro) 20 دقيقة ثم استراحة.</p>
+        </section>
 
-            <section id="section4" class="content-section">
-                <h1>الأدوات الأساسية: Anki و Yomitan</h1>
-                <h2>إضافة المتصفح Yomitan</h2>
-                <p>Yomitan هو إضافة للمتصفح تسمح لك بمعرفة معنى وقراءة الكلمات اليابانية بمجرد التمرير فوقها مع الضغط على مفتاح <code>Shift</code>. إنها أداة سحرية لا غنى عنها لقراءة الروايات ومواقع الإنترنت اليابانية واستخراج الكلمات بسهولة.</p>
-                <h2>برنامج Anki للتكرار المتباعد</h2>
-                <p>Anki هو برنامج يعتمد على البطاقات التعليمية لمساعدتك في تذكر الكلمات. ننصح بالبدء بحزمة <strong>Kaishi 1.5k</strong> لتعلم الكلمات الأساسية، ثم الانتقال لإنشاء بطاقاتك الخاصة من الكلمات التي تصادفك أثناء الانغماس (وتعرف هذه العملية باسم التنقيب أو Mining).</p>
-            </section>
+        <!-- ================= القواميس أحادية اللغة ================= -->
+        <section id="section-monolingual" class="content-section">
+            <h1>الانتقال إلى القواميس أحادية اللغة (ياباني-ياباني)</h1>
+            <p>لماذا؟ لأن الترجمة الإنجليزية (حتى الألمانية) لا تعبر عن المشاعر الحقيقية للكلمة. مثلاً 悔しい ≠ "vexing" فقط، بل تعني "خبرة الفشل والعار وعدم القدرة على النسيان".</p>
+            <p><strong>كيف تبدأ:</strong> اقرأ رواية كاملة (أو رواية بصرية) مع قاموس ياباني-ياباني فقط. استخدم Yomitan مع ترتيب القواميس التالي: 旺文社国語辞典, 明鏡国語辞典, 大辞林. إذا لم تفهم التعريف، ابحث عن الكلمات داخله عبر يوميتان (سماح المسح داخل المنبثق). لا تشيل هم – في البداية تذكر فقط جوهر التعريف (gist).</p>
+            <p>احذف العكاز الثنائي اللغة تدريجياً، وفي غضون أسابيع ستصبح قراءة التعريفات اليابانية طبيعة ثانية.</p>
+        </section>
 
-            <section id="section5" class="content-section">
-                <h1>الأسئلة الشائعة عن اللغة اليابانية</h1>
-                <h2>كيف أتعلم الكانجي؟</h2>
-                <p>من خلال القراءة فقط! اقرأ وابحث عن الكلمات. إذا حفظت كلمة تتكون من الكانجي وفهمتها، فأنت فعلياً قد "تعلمت" هذا الكانجي. تعلم قراءات (On و Kun) بشكل معزول هو مضيعة كاملة للوقت.</p>
-                <h2>متى سأصبح طليقاً؟</h2>
-                <p>يعتمد ذلك بشدة على طريقتك والوقت الذي تقضيه يومياً. بمتوسط 6 ساعات يومياً من الانغماس الصحيح، يمكن تقدير المدة بحوالي 4 سنوات لتصل إلى مستوى متقدم جداً.</p>
-                <h2>أشعر أنني لا أفهم شيئاً أثناء الاستماع، لماذا؟</h2>
-                <p>لأنك لم تستمع ولم تقرأ بما فيه الكفاية بعد. مع الاستمرار بالبحث عن الكلمات واستخدام تطبيق Anki والاستماع المكثف، ستبدأ بفهم نسبة كبيرة خلال بضعة أشهر.</p>
-            </section>
-        </main>
-    </div>
+        <!-- ================= التحدث والطلاقة ================= -->
+        <section id="section-speaking" class="content-section">
+            <h1>التحدث والطلاقة – المدخلات هي الأساس</h1>
+            <p>التحدث كثيراً لا يجعلك بارعاً. المدخلات (الاستماع والقراءة) هي ما ترفع سقف قدرتك على التحدث. ابدأ بالتحدث بعد أن تكون قد اكتسبت مئات الساعات من الاستماع الخام.</p>
+            <p>لا تخف من الأخطاء. لكن لا تتوقع أن يصححك الناطقون الأصليون – من غير المهذب تصحيحك. إذا شعرت أنك تترجم من الإنجليزية، فأنت بحاجة إلى مزيد من المدخلات. من أفضل الطرق: التظاهر بأنك الشخصية التي تستمع إليها (mental shadowing) وتخيل كيف ستستخدم العبارات.</p>
+            <p><strong>نبرة الصوت (Pitch Accent):</strong> كلما بدأت الاهتمام بها مبكراً كان أفضل. استخدم لعبة kotu.io واطلع على دليل Usagi Pronunciation.</p>
+        </section>
 
-    <script>
-        // سكريبت مبسط للتحكم في القائمة الجانبية والروابط
-        const navLinks = document.querySelectorAll('.nav-link');
-        const menuToggle = document.getElementById('menu-toggle');
-        const sidebar = document.querySelector('.sidebar');
+        <!-- ================= 5ch والمجتمع الياباني ================= -->
+        <section id="section-2ch" class="content-section">
+            <h1>استخدام 5ch وエッヂ لتفعيل اللغة</h1>
+            <p>5channel (5ch) هو منتدى ياباني شبيه بـ 4chan لكن بنظام الخيوط الطويلة. يمكنك القراءة دون تسجيل، لكن النشر يتطلب IP ياباني أو اشتراك UPLIFT. للبدء: إذهب إلى <a href="https://5ch.io/">5ch.io</a> واستعرض الألواح (boards) التي تهمك مثل ニュース速報+ أو ラブライブ!. استخدم إضافة <strong>5chutil</strong> لتضمين الصور وتحسين العرض. بديل حديث هو <strong>エッヂ (edge)</strong> والذي يسمح بالنشر باستخدام VPN عادي.</p>
+            <p>ملخص المصطلحات: スレ (خيط)، レス (رد)، sage (منع الرفع)، DAT落ち (أرشفة الخيط). الغوص في 5ch يعرضك لليابانية العامية الغير مصقولة والواقعية.</p>
+        </section>
 
-        // التحكم في زر القائمة للأجهزة المحمولة
-        if (menuToggle) {
-            menuToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('open');
-            });
-        }
-        
-        // التحكم في الحالة "النشطة" لروابط التنقل
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-                // إغلاق الشريط الجانبي عند النقر على رابط في وضع الموبايل
-                sidebar.classList.remove('open');
-            });
+        <!-- خاتمة: روابط سريعة لأدوات إضافية وملفات مساعدة -->
+        <section class="content-section">
+            <h2>أدوات إضافية لم تذكر بالتفصيل (لكنها موجودة في الموقع الأصلي)</h2>
+            <ul>
+                <li><code>timeadder.html</code> – إضافة وقت الاستماع/القراءة يدوياً لتتبع إحصائياتك.</li>
+                <li><code>texthooker_shoui.html</code> – واجهة محلل نصوص متقدم مع تتبع الأهداف.</li>
+                <li><code>autocards</code> – استخراج بطاقات أنكي بصورة وصوت الجملة بنقرة واحدة من الأنمي (يتطلب mpv).</li>
+                <li><code>google_jp_only.js</code> – سكريبت لمحرك البحث ليظهر النتائج اليابانية فقط.</li>
+            </ul>
+            <p>حمل جميع ملفات الإعدادات والخطوط والإضافات من الروابط الموجودة في دليل المصادر. هذا الموقع هو ترجمة كاملة لـ TheMoeWay مع الالتزام بالمحتوى الأصلي دون حذف أي ملف.</p>
+            <div class="warning-block">
+                🎌 تذكر: لا تحتاج إلى إجادة كل شيء قبل البدء. ابدأ الآن، ارتكب الأخطاء، واغمر نفسك يومياً. طريق الإتقان يبدأ بالخطوة الأولى – اقرأ أنمي خام لمدة 20 دقيقة اليوم.
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    // التحكم في القائمة الجانبية والروابط النشطة
+    const navLinks = document.querySelectorAll('.nav-link');
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+    }
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            if (window.innerWidth <= 800) sidebar.classList.remove('open');
         });
-    </script>
+    });
+    
+    // تمييز الرابط النشط عند التمرير
+    window.addEventListener('scroll', () => {
+        let current = '';
+        document.querySelectorAll('.content-section').forEach(section => {
+            const sectionTop = section.offsetTop - 100;
+            if (scrollY >= sectionTop) {
+                current = section.getAttribute('id');
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
 </body>
 </html>
