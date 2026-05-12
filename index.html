@@ -8,7 +8,133 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        /* PASTE ALL YOUR ORIGINAL CSS <style> CONTENT HERE */
+        /* --- متغيرات الألوان والتصميم الحديث --- */
+        :root {
+            --bg-main: #0f172a;       /* لون خلفية داكن عميق */
+            --bg-sidebar: #1e293b;    /* خلفية الشريط الجانبي */
+            --bg-card: #1e293b;       /* خلفية البطاقات */
+            --bg-card-hover: #334155; /* لون البطاقة عند التمرير */
+            --text-primary: #f8fafc;  /* نص رئيسي */
+            --text-secondary: #cbd5e1;/* نص فرعي/باهت */
+            --accent-color: #e11d48;  /* أحمر ياباني حديث */
+            --accent-hover: #be123c;
+            --border-color: #334155;
+            --sidebar-width: 300px;
+            --font-main: 'Tajawal', sans-serif;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --transition: all 0.3s ease;
+        }
+        
+        /* --- الإعدادات الأساسية --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        .sidebar::-webkit-scrollbar-track { background: var(--bg-sidebar); }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        html { scroll-behavior: smooth; font-family: var(--font-main); font-size: 16px; }
+        
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            display: flex;
+            min-height: 100vh;
+            text-align: right;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        
+        a { color: #38bdf8; text-decoration: none; transition: var(--transition); }
+        a:hover { color: #7dd3fc; text-decoration: underline; }
+        
+        h1, h2, h3 { color: var(--text-primary); font-weight: 700; margin-bottom: 1rem; }
+        p { color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 1.1rem; }
+        ul, ol { color: var(--text-secondary); margin-bottom: 1.5rem; padding-right: 1.5rem; font-size: 1.1rem; }
+        li { margin-bottom: 0.5rem; }
+
+        ruby { font-family: "Meiryo", "Yu Gothic", sans-serif; font-weight: bold; }
+        rt { font-size: 0.6em; color: var(--accent-color); }
+
+        code {
+            background-color: #020617;
+            color: #a7f3d0;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+            direction: ltr;
+            display: inline-block;
+        }
+
+        /* --- الشريط الجانبي --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-sidebar);
+            position: fixed;
+            height: 100%;
+            right: 0;
+            top: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            border-left: 1px solid var(--border-color);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .sidebar-header { padding: 2rem 1.5rem; border-bottom: 1px solid var(--border-color); text-align: center; }
+        .sidebar-header .logo { display: block; font-size: 2.5rem; color: var(--accent-color); margin-bottom: 0.5rem; }
+        .sidebar-header .subtitle { font-size: 1rem; color: var(--text-secondary); font-weight: 500; }
+        
+        .sidebar-nav { list-style: none; padding: 1.5rem 0; }
+        .sidebar-nav li a {
+            display: block; color: var(--text-secondary); padding: 0.8rem 2rem;
+            font-size: 1.1rem; font-weight: 500; border-right: 4px solid transparent;
+        }
+        .sidebar-nav li a:hover { background-color: rgba(225, 29, 72, 0.1); color: var(--text-primary); text-decoration: none; }
+        .sidebar-nav li a.active { background-color: rgba(225, 29, 72, 0.15); color: var(--accent-color); border-right: 4px solid var(--accent-color); }
+
+        /* --- المحتوى الرئيسي --- */
+        .main-content { flex-grow: 1; margin-right: var(--sidebar-width); padding: 3rem; display: flex; justify-content: center; }
+        .content-wrapper { max-width: 900px; width: 100%; }
+        
+        .content-section { margin-bottom: 5rem; padding-top: 2rem; opacity: 1; }
+        .content-section h1 { font-size: 2.5rem; color: var(--accent-color); border-bottom: 2px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 2rem; }
+        .content-section h2 { font-size: 1.8rem; margin-top: 3rem; color: var(--text-primary); }
+        
+        /* --- البطاقات والتنسيقات الخاصة --- */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; transition: var(--transition); }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent-color); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .card h3 { color: var(--accent-color); font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .card p { font-size: 1rem; margin-bottom: 0; }
+
+        .notice-block { background-color: rgba(56, 189, 248, 0.1); border-right: 4px solid #38bdf8; padding: 1.5rem; border-radius: var(--radius-md); margin: 2rem 0; color: var(--text-primary); }
+        .notice-block.warning { background-color: rgba(225, 29, 72, 0.1); border-right-color: var(--accent-color); }
+        .notice-block strong { display: block; margin-bottom: 0.5rem; font-size: 1.2rem; }
+
+        /* --- زر القائمة للموبايل --- */
+        #menu-toggle {
+            display: none; position: fixed; top: 1rem; right: 1rem; z-index: 1100;
+            background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem; font-size: 1.5rem; border-radius: var(--radius-md); cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        
+        /* --- التجاوب مع الشاشات الصغيرة --- */
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(100%); }
+            .sidebar.open { transform: translateX(0); box-shadow: -5px 0 25px rgba(0,0,0,0.5); }
+            .main-content { margin-right: 0; padding: 5rem 1.5rem 2rem; }
+            #menu-toggle { display: block; }
+            .card-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -28,17 +154,16 @@
     <div class="content-wrapper">
         
         <!-- ====== MODULAR SECTIONS SYSTEM ====== -->
-        <!-- Just drop a new div here when you make a new html file -->
+        <!-- Add your sections here. Ensure the filenames match EXACTLY what is in your 'sections' folder -->
+        
         <div data-include="sections/guide.html"></div>
+        
+        <!-- Uncomment or add these as you create the files in your repo -->
+        <!--
         <div data-include="sections/kanji.html"></div>
         <div data-include="sections/reading.html"></div>
         <div data-include="sections/grammar.html"></div>
-        <div data-include="sections/resources.html"></div>
-        <div data-include="sections/routine.html"></div>
-        <div data-include="sections/vn.html"></div>
-        <div data-include="sections/monolingual.html"></div>
-        <div data-include="sections/speaking.html"></div>
-        <div data-include="sections/faq.html"></div>
+        -->
         <!-- ===================================== -->
 
     </div>
@@ -82,7 +207,7 @@
         // 3. Initialize Sidebar click, mobile toggle, and scroll-spy events
         initNavigation();
 
-        // 4. Handle direct URL anchor links on initial page load (e.g., mysite.com/#section-kanji)
+        // 4. Handle direct URL anchor links on initial page load
         if (window.location.hash) {
             const target = document.querySelector(window.location.hash);
             if (target) {
@@ -127,7 +252,6 @@
             });
         });
 
-        // Highlight first link initially
         if(navLinks.length > 0) {
             navLinks[0].classList.add('active');
         }
